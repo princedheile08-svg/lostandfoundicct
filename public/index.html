@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="config.js"></script>
+<title>ICCT Colleges · Lost &amp; Found</title>
+<link rel="icon" href="logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6fb;--sf:#fff;--tx:#141b34;--mut:#5d6785;--bd:#e1e5f0;--navy:#12256b;--red:#d7263d;--lost:#c62b45;--found:#0b8a6f;--claim:#6b7592;--r:10px}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1020;--sf:#141b34;--tx:#eaedf8;--mut:#97a1c2;--bd:#26304f;--navy:#7d93ff;--lost:#ff7a8e;--found:#3ad3b1;--claim:#98a2c3}}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Public Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{background:var(--sf);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:14px;height:64px}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}.brand img{width:40px;height:40px;border-radius:50%}
+.brand b{display:block;font-size:15px;line-height:1.2}.brand small{color:var(--mut);font-size:12px}
+.tabs{display:flex;gap:2px}.tab{border:0;background:none;padding:8px 14px;font-weight:600;font-size:14px;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;height:64px}
+.tab.on{color:var(--tx);border-color:var(--red)}
+.btn{border:1px solid var(--bd);background:var(--sf);border-radius:var(--r);padding:8px 14px;font-weight:600;font-size:14px;cursor:pointer}
+.btn:hover{border-color:var(--navy)}.btn.pri{background:var(--navy);border-color:var(--navy);color:#fff}.btn.red{background:var(--red);border-color:var(--red);color:#fff}.btn.sm{padding:5px 10px;font-size:13px}.btn:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.intro{padding:36px 0 20px}.intro h1{font-size:30px;line-height:1.2;max-width:620px;letter-spacing:-.02em}.intro p{color:var(--mut);margin:8px 0 20px;max-width:560px}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);margin:24px 0}
+.stat{padding:16px 20px;border-right:1px solid var(--bd)}.stat:last-child{border:0}.stat b{font-size:26px;display:block;line-height:1.2}.stat small{color:var(--mut);font-size:13px}
+.filters{display:grid;grid-template-columns:1fr 200px 160px auto;gap:10px;margin-bottom:20px}
+.in{width:100%;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:9px 12px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:60px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;text-align:left;padding:0;display:block;width:100%}
+.card:hover{border-color:var(--navy)}
+.ph{height:150px;background:var(--bg);display:grid;place-items:center;font-size:48px;position:relative;border-bottom:1px solid var(--bd)}.ph img{width:100%;height:100%;object-fit:cover}
+.cb{padding:12px 14px 14px}.cb h3{font-size:15px;margin:6px 0 4px}.cb p{font-size:13px;color:var(--mut)}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;border:1px solid currentColor}
+.chip.Lost{color:var(--lost)}.chip.Found{color:var(--found)}.chip.Claimed{color:var(--claim)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:50px 0}
+.panel{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:auto;margin-bottom:60px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}th{text-align:left;padding:12px 14px;color:var(--mut);font-weight:600;border-bottom:1px solid var(--bd);font-size:13px}td{padding:10px 14px;border-bottom:1px solid var(--bd)}tr:last-child td{border:0}
+.th{width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--bg);display:grid;place-items:center}.th img{width:100%;height:100%;object-fit:cover}
+.hd2{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:28px 0 16px}.hd2 h2{font-size:22px}.hd2 p{color:var(--mut);font-size:14px}
+.ov{position:fixed;inset:0;background:rgba(10,15,40,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}.ov.show{display:flex}
+.md{background:var(--sf);border-radius:14px;width:100%;max-width:500px;max-height:92vh;overflow:auto;border:1px solid var(--bd)}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--bd)}.mh h3{font-size:17px}
+.x{border:0;background:none;font-size:20px;cursor:pointer;color:var(--mut)}
+.fm{padding:18px 20px 20px;display:grid;gap:14px}.fm label{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--mut)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.drop{border:1.5px dashed var(--bd);border-radius:var(--r);padding:14px;text-align:center;font-size:14px;color:var(--mut);cursor:pointer}.drop img{max-height:110px;border-radius:8px;margin-top:8px}
+.dimg{height:200px;background:var(--bg);display:grid;place-items:center;font-size:72px}.dimg img{width:100%;height:100%;object-fit:cover}
+.db{padding:18px 20px 20px;display:grid;gap:10px}.db p{color:var(--mut);font-size:14px}.db h3{font-size:19px}
+.match{border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;font-size:14px;cursor:pointer}.match small{display:block;color:var(--mut)}.match b span{float:right;color:var(--red)}
+.fab{position:fixed;right:20px;bottom:20px;border-radius:99px;padding:12px 18px;z-index:30;box-shadow:0 6px 20px rgba(18,37,107,.35)}
+.chat{position:fixed;right:20px;bottom:76px;width:min(360px,calc(100vw - 40px));height:min(500px,68vh);background:var(--sf);border:1px solid var(--bd);border-radius:14px;display:none;flex-direction:column;z-index:40;box-shadow:0 14px 40px rgba(10,15,40,.25)}.chat.open{display:flex}
+.msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px}.m{max-width:88%;padding:9px 12px;border-radius:12px;font-size:14px;white-space:pre-wrap}.m.u{align-self:flex-end;background:var(--navy);color:#fff}.m.a{align-self:flex-start;background:var(--bg);border:1px solid var(--bd)}
+.cf{display:flex;gap:8px;padding:10px;border-top:1px solid var(--bd)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:var(--r);font-size:14px;font-weight:600;z-index:90}
+.hidden{display:none!important}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--bd)}.filters{grid-template-columns:1fr 1fr}.filters .in:first-child{grid-column:1/-1}.brand small{display:none}.two{grid-template-columns:1fr}.tab{padding:8px 8px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><img src="logo.jpg" alt="ICCT seal"><div><b>ICCT Colleges Foundation Inc.</b><small>Lost &amp; Found</small></div></div>
+  <nav class="tabs"><button class="tab on" id="tBrowse" onclick="view('browse')">Browse</button><button class="tab hidden" id="tAdmin" onclick="view('admin')">Manage</button></nav>
+  <button class="btn sm" id="authBtn" onclick="authClick()">Staff sign in</button>
+</div></header>
+
+<main class="wrap">
+<section id="vBrowse">
+  <div class="intro"><h1>Find what you lost on campus, or report what you found.</h1><p>Items handed in at the guard house are listed here. Search the list, or ask the assistant to match your item.</p>
+    <div class="acts"><button class="btn red" onclick="openReport('Lost')">Report a lost item</button><button class="btn pri" onclick="openReport('Found')">Report a found item</button></div></div>
+  <div class="stats" id="stats"></div>
+  <div class="filters"><input class="in" id="q" placeholder="Search by item or location" oninput="render()" aria-label="Search"><select class="in" id="fc" onchange="render()" aria-label="Category"></select>
+    <select class="in" id="fs" onchange="render()" aria-label="Status"><option value="All">All statuses</option><option>Lost</option><option>Found</option><option>Claimed</option></select><button class="btn" onclick="resetF()">Clear</button></div>
+  <div class="grid" id="grid"></div>
+</section>
+<section id="vAdmin" class="hidden">
+  <div class="hd2"><div><h2>Manage reports</h2><p id="adminNote"></p></div><button class="btn pri" id="insBtn" onclick="insights()">Summarize with AI</button></div>
+  <div class="panel hidden" id="insights" style="padding:16px 20px;margin-bottom:16px;white-space:pre-wrap;font-size:14px"></div>
+  <div class="panel"><table><thead><tr><th>Photo</th><th>Item</th><th>Category</th><th>Type</th><th>Location</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+</section>
+</main>
+
+<div class="ov" id="mReport" onclick="if(event.target===this)closeM('mReport')"><div class="md">
+  <div class="mh"><h3 id="rTitle"></h3><button class="x" onclick="closeM('mReport')" aria-label="Close">✕</button></div>
+  <form class="fm" onsubmit="submitReport(event)">
+    <div class="drop" onclick="$('file').click()"><span id="dropT">Add a photo (optional)</span><div id="prev"></div></div>
+    <input type="file" id="file" accept="image/*" class="hidden" onchange="onFile(event)">
+    <button type="button" class="btn sm hidden" id="aiFill" onclick="aiFill()" style="justify-self:start">Fill details from photo</button>
+    <label>Item name<input class="in" id="fTitle" required maxlength="160" placeholder="e.g. Blue Hydro Flask 32oz"></label>
+    <div class="two"><label>Category<select class="in" id="fCat"></select></label><label>Date<input class="in" type="date" id="fDate" required></label></div>
+    <label>Location<input class="in" id="fLoc" required maxlength="200" placeholder="e.g. Library 2nd floor"></label>
+    <label>Description<textarea class="in" id="fDesc" rows="3" placeholder="Colors, marks, stickers, what’s inside"></textarea></label>
+    <div style="display:flex;justify-content:flex-end;gap:10px"><button type="button" class="btn" onclick="closeM('mReport')">Cancel</button><button class="btn pri" id="subBtn">Submit report</button></div>
+  </form></div></div>
+
+<div class="ov" id="mDetail" onclick="if(event.target===this)closeM('mDetail')"><div class="md" id="dBox"></div></div>
+<div class="ov" id="mAuth" onclick="if(event.target===this)closeM('mAuth')"><div class="md" style="max-width:380px">
+  <div class="mh"><h3>Staff sign in</h3><button class="x" onclick="closeM('mAuth')" aria-label="Close">✕</button></div>
+  <form class="fm" onsubmit="login(event)"><label>Role<select class="in" id="aRole"><option>Staff</option><option>Admin</option></select></label>
+  <label>Password<input class="in" type="password" id="aPw" required autocomplete="current-password"></label>
+  <button class="btn pri" id="aBtn">Sign in</button></form></div></div>
+
+<button class="btn pri fab" onclick="toggleChat()">Ask the assistant</button>
+<div class="chat" id="chat"><div class="mh"><h3>Campus assistant</h3><button class="x" onclick="toggleChat()" aria-label="Close">✕</button></div>
+  <div class="msgs" id="msgs"><div class="m a">Describe what you lost and I’ll check the reports for a match.</div></div>
+  <form class="cf" onsubmit="send(event)"><input class="in" id="ci" placeholder="Ask about an item" autocomplete="off"><button class="btn pri" id="cs">Send</button></form></div>
+
+<script>
+const CATS=['Electronics','ID & Cards','Bags & Clothing','School Supplies','Keys & Personal','Other'];
+const EMO={'Electronics':'🎧','ID & Cards':'🪪','Bags & Clothing':'🎒','School Supplies':'📚','Keys & Personal':'🔑','Other':'📦'};
+let items=[],role='Student',imgData='',curType='Lost',hist=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const get=id=>items.find(i=>i.id===id);
+const BASE=(window.API_BASE||'').replace(/\/$/,''),DEMO_MODE=BASE==='demo';
+const SEED=[['Apple AirPods Pro case','Electronics','Found','Found','Library 2nd floor study desk','2026-10-20','White charging case near the window tables. Small scratch on the back.','Student'],['Matte blue Hydro Flask','School Supplies','Lost','Lost','Gymnasium bleachers','2026-10-22','32oz bottle with a NASA sticker and a mountain sticker.','Student'],['Student ID card (BSIT)','ID & Cards','Found','Found','Cafeteria counter 3','2026-10-23','ID inside a blue lanyard, found near the cash register.','Staff'],['Black Herschel backpack','Bags & Clothing','Lost','Claimed','Science Building Room 201','2026-10-15','Contains notebooks and a red pencil case.','Student']].map((d,i)=>({id:'demo'+i,title:d[0],category:d[1],type:d[2],status:d[3],location:d[4],date:d[5],description:d[6],image:'',reportedBy:d[7]}));
+function demoApi(path,method,b){
+  const [p,qs]=path.split('?'),id=new URLSearchParams(qs||'').get('id'),rk={Student:0,Staff:1,Admin:2};
+  let items;try{items=JSON.parse(localStorage.getItem('icct_demo'))}catch{}items=items||SEED;
+  const save=()=>localStorage.setItem('icct_demo',JSON.stringify(items)),role=sessionStorage.getItem('role')||'Student';
+  if(p==='auth'){
+    if(method==='DELETE'){sessionStorage.removeItem('role');return{role:'Student'}}
+    if(method==='POST'){if(b.password!=='demo')throw new Error('Demo password is "demo"');sessionStorage.setItem('role',b.role);return{role:b.role}}
+    return{role};
+  }
+  if(p==='ai')throw new Error('The AI assistant needs the backend. See the README.');
+  if(method==='POST'){if(!b.title||!b.location)throw new Error('Title and location are required');items.unshift({id:'i'+Date.now().toString(36),title:b.title,category:b.category,type:b.type,status:b.type,location:b.location,date:b.date,description:b.description,image:b.image||'',reportedBy:role});save();return{ok:true}}
+  if(method==='PATCH'){if(rk[role]<1)throw new Error('Staff sign-in required');const it=items.find(x=>x.id===id);if(it)it.status='Claimed';save();return{ok:true}}
+  if(method==='DELETE'){if(rk[role]<2)throw new Error('Admin sign-in required');items=items.filter(x=>x.id!==id);save();return{ok:true}}
+  return{items,role};
+}
+async function api(path,method,body){
+  if(DEMO_MODE)return demoApi(path,method,body);
+  const h={};if(body)h['Content-Type']='application/json';const t=sessionStorage.getItem('tok');if(t)h.Authorization='Bearer '+t;
+  const r=await fetch(BASE+'/api/'+path,{method:method||'GET',headers:h,body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Request failed ('+r.status+')');
+  if(path==='auth'){if(method==='POST'&&j.token)sessionStorage.setItem('tok',j.token);if(method==='DELETE')sessionStorage.removeItem('tok')}
+  return j;
+}
+function toast(t){const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200)}
+const openM=id=>$(id).classList.add('show'),closeM=id=>$(id).classList.remove('show');
+function view(v){$('vBrowse').classList.toggle('hidden',v!=='browse');$('vAdmin').classList.toggle('hidden',v!=='admin');$('tBrowse').classList.toggle('on',v==='browse');$('tAdmin').classList.toggle('on',v==='admin');scrollTo(0,0)}
+async function load(){
+  try{const d=await api('items');items=d.items;role=d.role}catch(e){$('grid').innerHTML=`<div class="empty">Couldn’t load reports.<br>${esc(e.message)}</div>`;return}
+  render();
+}
+function vis(it){return it.image?`<img src="${it.image}" alt="${esc(it.title)}">`:EMO[it.category]||'📦'}
+function render(){
+  const n=s=>items.filter(i=>i.status===s).length,cl=n('Claimed');
+  $('stats').innerHTML=[['Still lost',n('Lost')],['Waiting to be claimed',n('Found')],['Returned to owners',cl],['Return rate',(items.length?Math.round(cl/items.length*100):0)+'%']].map(s=>`<div class="stat"><b>${s[1]}</b><small>${s[0]}</small></div>`).join('');
+  const q=$('q').value.toLowerCase(),c=$('fc').value,s=$('fs').value;
+  const f=items.filter(i=>(i.title+i.location+i.description).toLowerCase().includes(q)&&(c==='All'||i.category===c)&&(s==='All'||i.status===s));
+  $('grid').innerHTML=f.length?f.map(it=>`<button class="card" onclick="openDetail('${it.id}')"><div class="ph">${vis(it)}</div><div class="cb"><span class="chip ${it.status}">${it.status}</span><h3>${esc(it.title)}</h3><p>${esc(it.location)}</p><p>${esc(it.date)} · ${esc(it.category)}</p></div></button>`).join(''):`<div class="empty">No items match your search.<br>Try another word, or report the item yourself.</div>`;
+  const staff=role!=='Student';
+  $('tAdmin').classList.toggle('hidden',!staff);$('authBtn').textContent=staff?`Sign out (${role})`:'Staff sign in';
+  if(!staff&&!$('vAdmin').classList.contains('hidden'))view('browse');
+  $('adminNote').textContent=role==='Admin'?'Signed in as admin: you can mark items claimed and delete reports.':'Signed in as staff: you can mark items claimed. Deleting needs an admin.';
+  $('tb').innerHTML=items.map(it=>`<tr><td><div class="th">${it.image?`<img src="${it.image}" alt="">`:EMO[it.category]||'📦'}</div></td><td><b>${esc(it.title)}</b></td><td>${esc(it.category)}</td><td>${it.type}</td><td>${esc(it.location)}</td><td>${esc(it.date)}</td><td><span class="chip ${it.status}">${it.status}</span></td>
+  <td style="text-align:right;white-space:nowrap">${it.status!=='Claimed'?`<button class="btn sm" onclick="claim('${it.id}')">Mark claimed</button> `:''}${role==='Admin'?`<button class="btn sm" style="color:var(--lost)" onclick="del('${it.id}')">Delete</button>`:''}</td></tr>`).join('');
+}
+function resetF(){$('q').value='';$('fc').value='All';$('fs').value='All';render()}
+async function claim(id){try{await api('items?id='+id,'PATCH');await load();toast('Marked as claimed')}catch(e){toast(e.message)}}
+async function del(id){if(!confirm('Delete this report permanently?'))return;try{await api('items?id='+id,'DELETE');await load();toast('Report deleted')}catch(e){toast(e.message)}}
+function openDetail(id){
+  const it=get(id);if(!it)return;
+  $('dBox').innerHTML=`<div class="dimg">${vis(it)}</div><div class="db"><div style="display:flex;justify-content:space-between;gap:10px"><h3>${esc(it.title)}</h3><button class="x" onclick="closeM('mDetail')" aria-label="Close">✕</button></div>
+  <div><span class="chip ${it.status}">${it.status}</span> <span class="chip" style="color:var(--mut)">${esc(it.category)}</span></div>
+  <p><b>Where:</b> ${esc(it.location)}<br><b>When:</b> ${esc(it.date)}<br><b>Reported by:</b> ${esc(it.reportedBy)} (${it.type.toLowerCase()})</p><p>${esc(it.description)}</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">${it.status!=='Claimed'?`<button class="btn sm" id="mBtn" onclick="aiMatch('${it.id}')">Find matches with AI</button>`:''}${role!=='Student'&&it.status!=='Claimed'?`<button class="btn sm pri" onclick="claim('${it.id}');closeM('mDetail')">Mark as claimed</button>`:''}</div>
+  <div id="matches" style="display:grid;gap:8px"></div></div>`;openM('mDetail');
+}
+function openReport(t){curType=t;$('rTitle').textContent=t==='Lost'?'Report a lost item':'Report a found item';$('fDate').valueAsDate=new Date();['fTitle','fLoc','fDesc'].forEach(i=>$(i).value='');$('prev').innerHTML='';$('dropT').textContent='Add a photo (optional)';$('aiFill').classList.add('hidden');imgData='';openM('mReport')}
+function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.7))};im.src=r.result};r.readAsDataURL(file)})}
+async function onFile(e){const f=e.target.files[0];if(!f)return;imgData=await shrink(f);$('prev').innerHTML=`<img src="${imgData}" alt="Preview">`;$('dropT').textContent='Photo added. Tap to change.';$('aiFill').classList.remove('hidden')}
+async function submitReport(e){
+  e.preventDefault();$('subBtn').disabled=true;
+  try{await api('items','POST',{title:$('fTitle').value,category:$('fCat').value,type:curType,location:$('fLoc').value,date:$('fDate').value,description:$('fDesc').value||'No extra description provided.',image:imgData});
+    closeM('mReport');await load();view('browse');toast(curType+' report submitted')}catch(e){toast(e.message)}
+  $('subBtn').disabled=false;
+}
+function authClick(){if(role==='Student')openM('mAuth');else api('auth','DELETE').then(()=>{role='Student';render();toast('Signed out')})}
+async function login(e){e.preventDefault();$('aBtn').disabled=true;
+  try{const d=await api('auth','POST',{role:$('aRole').value,password:$('aPw').value});role=d.role;$('aPw').value='';closeM('mAuth');render();toast('Signed in as '+role)}catch(e){toast(e.message)}
+  $('aBtn').disabled=false}
+/* AI */
+async function busy(b,t,fn){const o=b.textContent;b.textContent=t;b.disabled=true;try{await fn()}catch(e){toast(e.message)}b.textContent=o;b.disabled=false}
+const aiFill=()=>busy($('aiFill'),'Reading photo…',async()=>{const r=await api('ai','POST',{action:'fill',image:imgData});if(r.title)$('fTitle').value=r.title;if(CATS.includes(r.category))$('fCat').value=r.category;if(r.description)$('fDesc').value=r.description});
+const aiMatch=id=>busy($('mBtn'),'Matching…',async()=>{const r=await api('ai','POST',{action:'match',id});const l=(r.matches||[]).filter(m=>get(m.id)).sort((a,b)=>b.score-a.score);
+  $('matches').innerHTML=l.length?l.map(m=>`<div class="match" onclick="openDetail('${m.id}')"><b>${esc(get(m.id).title)}<span>${Math.round(m.score)}%</span></b><small>${esc(m.reason)}</small></div>`).join(''):'<p style="font-size:14px;color:var(--mut)">No likely matches yet.</p>'});
+const insights=()=>busy($('insBtn'),'Analyzing…',async()=>{const r=await api('ai','POST',{action:'insights'});$('insights').textContent=r.text;$('insights').classList.remove('hidden')});
+function toggleChat(){$('chat').classList.toggle('open');if($('chat').classList.contains('open'))$('ci').focus()}
+function addMsg(t,k){const d=document.createElement('div');d.className='m '+k;d.textContent=t;$('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d}
+async function send(e){
+  e.preventDefault();const t=$('ci').value.trim();if(!t)return;$('ci').value='';addMsg(t,'u');hist.push({role:'user',content:t});
+  const out=addMsg('…','a');$('cs').disabled=true;
+  try{const r=await api('ai','POST',{action:'chat',messages:hist});out.textContent=r.text;hist.push({role:'assistant',content:r.text})}catch(err){out.textContent=err.message}
+  $('cs').disabled=false;
+}
+$('fc').innerHTML='<option value="All">All categories</option>'+CATS.map(c=>`<option>${esc(c)}</option>`).join('');
+$('fCat').innerHTML=CATS.map(c=>`<option>${esc(c)}</option>`).join('');
+addEventListener('keydown',e=>{if(e.key==='Escape')['mReport','mDetail','mAuth'].forEach(closeM)});
+if(DEMO_MODE){const n=document.createElement('p');n.style.cssText='font-size:13px;color:var(--mut);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;background:var(--sf);margin-bottom:16px;max-width:640px';n.textContent='Demo mode: reports are saved in this browser only. Staff sign-in password: demo.';document.querySelector('.intro').appendChild(n)}
+load();
+</script>
+</body>
+</html>
